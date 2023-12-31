@@ -1,0 +1,48 @@
+extends Node2D
+
+var numberToItems: Dictionary = {
+	1: ["Treasure", "Battle", "Encounter", "No Event"], 2: ["No Event", "Treasure", "Battle", "Encounter"],
+	3: ["Encounter", "No Event", "Treasure", "Battle"], 4: ["No Event", "Encounter", "Battle", "Treasure"],
+	5: ["Encounter", "Battle", "Treasure", "No Event"], 6: ["Battle", "Treasure", "Encounter", "No Event"],
+	7: ["Treasure", "Battle", "No Event", "Encounter"], 8: ["Encounter", "Treasure", "Battle", "No Event"],
+	9: ["No Event", "Encounter", "Treasure", "Battle"], 10: ["No Event", "Encounter", "Battle", "Treasure"],
+	11: ["Treasure", "Battle", "Encounter", "No Event"], 12: ["No Event", "Treasure", "Battle", "Encounter"],
+	13: ["Encounter", "No Event", "Treasure", "Battle"], 14: ["No Event", "Encounter", "Battle", "Treasure"],
+	15: ["Encounter", "Battle", "Treasure", "No Event"], 16: ["Battle", "Treasure", "Encounter", "No Event"],
+	17: ["Treasure", "Battle", "No Event", "Encounter"], 18: ["Encounter", "Treasure", "Battle", "No Event"],
+	19: ["No Event", "Encounter", "Treasure", "Battle"], 20: ["No Event", "Encounter", "Battle", "Treasure"],
+	21: ["Treasure", "Battle", "Encounter", "No Event"], 22: ["No Event", "Treasure", "Battle", "Encounter"],
+	23: ["Encounter", "No Event", "Treasure", "Battle"], 24: ["No Event", "Encounter", "Battle", "Treasure"],
+	25: ["Encounter", "Battle", "Treasure", "No Event"]
+}
+
+var guessedNumbers: Array = []
+var labelQuestion: Label
+var lineEditInput: LineEdit
+var buttonCheck: Button
+
+func _ready():
+	labelQuestion = $LabelQuestion
+	lineEditInput = $LineEditInput
+	buttonCheck = $ButtonCheck
+
+func _on_button_check_pressed():
+	var playerGuess: int = int(lineEditInput.text)
+
+	# Check if the number is within the valid range
+	if playerGuess < 1 or playerGuess > 25:
+		labelQuestion.text = "Please enter a number between 1 and 25."
+		return
+
+	# Check if the number has already been guessed
+	if playerGuess in guessedNumbers:
+		labelQuestion.text = "You already guessed " + str(playerGuess) + ". Try another number!"
+		return
+
+	guessedNumbers.append(playerGuess)
+	var items: Array = numberToItems[playerGuess]
+
+	# Randomly choose one item from the list
+	var randomItem: String = items[randi() % items.size()]
+
+	labelQuestion.text = "" + str(playerGuess) + ". The event is = " + randomItem
