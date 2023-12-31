@@ -1,0 +1,36 @@
+extends Node2D
+
+var totalSum = 0
+var stageThresholds = [10, 40, 100, 190, 210, 360, 540, 750, 990, 1260, 1560]  # Example thresholds for each stage
+
+func _ready():
+	pass
+	#$InputButton.connect("pressed", self, "_on_InputButton_pressed")
+
+func handleNumberInput(number):
+	if number != 0:  # Check if the input is a valid number
+		totalSum += number
+		print("Total EXP:", totalSum)  # Add a print statement for debugging
+		$LabelStage/LabelNumber.text = "Total EXP: " + str(totalSum)  # Update the label to display the total sum
+		updateStage()
+
+func updateStage():
+	var currentStage = 1
+
+	for i in range(stageThresholds.size()):
+		if totalSum >= stageThresholds[i]:
+			currentStage = i + 2  # Adjusting the stage value
+		else:
+			break
+
+	$LabelStage.text = "Level " + str(currentStage)
+	if currentStage <= stageThresholds.size():
+		$LabelStage/NextStageLabel.text = "EXP Requirement: " + str(stageThresholds[currentStage - 1] - totalSum) + " more"
+	else:
+		$LabelStage/NextStageLabel.text = "Max LVL reached"
+
+func _on_input_button_pressed():
+	var inputText = $InputNumber.text
+	var inputNumber = inputText.to_int()
+	handleNumberInput(inputNumber)
+
